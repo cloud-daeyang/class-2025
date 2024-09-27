@@ -78,6 +78,34 @@
 
 ![alt text](img/regex8.jpg)
 
+#### 여러 구분자가 섞여있을때
+```
+원본로그: 2024/09/26:19:32:00 GET,/v1/product 500
+정규표현: ^(?<time>[^ ]*) (?<method>[^ ]*),(?<path>[^ ]*) (?<status_code>[^ ]*)$
+켭쳐결과: time=2024/09/26:19:32:00, method=GET, path=/v1/product, status_code=500
+```
+
+#### 필요없는 값이 있을때
+```
+원본로그: 2024/09/26:17:54:56 hello.com GET /v1/get 200
+정규표현: ^(?<time>[^ ]*) [^ ]* (?<method>[^ ]*),(?<path>[^ ]*) (?<status_code>[^ ]*)$
+캡쳐결과: time=2024/09/26:17:54:56, method=GET, path=/v1/product, status_code=500
+```
+
+#### 따움표로 감싸져 있을때
+```
+원본로그: 2024/09/26:17:54:56 "GET /v1/get" 200
+정규표현: ^(?<time>[^ ]*) "(?<method>[^ ]*) (?<path>[^"]*)" (?<status_code>[^ ]*)$
+캡쳐결과: time=2024/09/26:17:54:56, method=GET, path=/v1/product, status_code=500
+```
+
+#### 대괄호로 감싸져 있을때
+```
+원본로그: [2024/09/26 17:54:56] "GET /v1/get" 200
+정규표현: ^\[(?<time>[^\]*)\] "(?<method>[^ ]*) (?<path>[^"]*)" (?<status_code>[^ ]*)$
+캡쳐결과: time=2024/09/26 17:54:56, method=GET, path=/v1/product, status_code=500
+```
+
 # 6. 실제 어플리케이션 로그 파싱
 ```
 원본로그:
